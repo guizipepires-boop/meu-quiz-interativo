@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: Qual é o Seu Maior Bloqueio?</title>
+    <meta name="description" content="Descubra em 3 minutos qual o hábito que está te impedindo de aplicar o que você estuda.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="background-overlay"></div>
+
+    <main class="app-container">
+        <!-- Progress Header -->
+        <header class="quiz-header" id="quiz-header" style="display: none;">
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <span class="step-indicator" id="step-indicator">Pergunta 1/16</span>
+        </header>
+
+        <!-- Dynamic Content Area -->
+        <div id="content-card" class="card fade-in">
+            <!-- Content injected by JS -->
+            <div class="intro-content">
+                <h1 class="main-title">Qual é o Seu Maior Bloqueio Para Transformar Conhecimento em Resultados?</h1>
+                <p class="subtitle">Descubra em 3 minutos qual o hábito que está te impedindo de aplicar o que você estuda e ganhe um plano de ação personalizado.</p>
+                <button class="btn-primary" onclick="startQuiz()">
+                    COMEÇAR AGORA <i data-lucide="arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Hidden Templates or Preloaded assets can go here -->
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
