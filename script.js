@@ -404,7 +404,7 @@ function showResultsPage() {
                         <p style="font-size: 0.9rem; color: #cbd5e1;">(ou 6x de R$ 5,07)</p>
                      </div>
                      
-                     <button class="btn-primary" style="background: #10B981; width: 100%; font-size: 1.2rem; padding: 1.2rem; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);" onclick="window.location.href='#'">
+                     <button class="btn-primary" style="background: #10B981; width: 100%; font-size: 1.2rem; padding: 1.2rem; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);" onclick="window.location.href='https://pay.kiwify.com.br/CPDkfEd'">
                         QUERO ADQUIRIR AGORA! <i data-lucide="arrow-right"></i>
                      </button>
                      
