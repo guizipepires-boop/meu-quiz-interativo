@@ -1,82 +1,254 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz: O Que Te Impede de Ter Resultados?</title>
-    <meta name="description"
-        content="Descubra em 3 minutos qual o hábito que está te impedindo de aplicar o que você estuda.">
+    <title>Check Semanal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;700;800&display=swap"
-        rel="stylesheet">
+        body {
+            font-family: Arial, sans-serif;
+            padding: 15px;
+            background: #f0f0f0;
+            min-height: 100vh;
+        }
 
-    <!-- Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
 
-    <!-- Meta Pixel Code -->
-    <script>
-        !function (f, b, e, v, n, t, s) {
-            if (f.fbq) return; n = f.fbq = function () {
-                n.callMethod ?
-                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-            };
-            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
-            n.queue = []; t = b.createElement(e); t.async = !0;
-            t.src = v; s = b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t, s)
-        }(window, document, 'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '934273912290082');
-        fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-            src="https://www.facebook.com/tr?id=934273912290082&ev=PageView&noscript=1" /></noscript>
-    <!-- End Meta Pixel Code -->
+        .title {
+            width: 100%;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            border: none;
+            border-bottom: 2px solid green;
+            padding: 10px;
+            margin-bottom: 20px;
+            background: transparent;
+        }
 
-    <link rel="stylesheet" href="styles.css">
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8f8f8;
+            padding: 12px 8px;
+            font-weight: bold;
+            border: 1px solid #ccc;
+        }
+
+        td {
+            height: 65px;
+            border: 1px solid #ccc;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .checked {
+            background: #4CAF50 !important;
+        }
+
+        .check {
+            color: white;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .tabs {
+            display: flex;
+            overflow-x: auto;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            padding: 10px 15px;
+            background: #ddd;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .tab-btn.active {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .add-btn {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="container">
+        <div id="tabs" class="tabs"></div>
+        <input type="text" class="title" id="titleInput" placeholder="Digite o título">
+        <table id="table"></table>
+    </div>
 
-    <div class="background-overlay"></div>
-
-    <main class="app-container">
-        <!-- Progress Header -->
-        <header class="quiz-header" id="quiz-header" style="display: none;">
-            <div class="progress-container">
-                <div class="progress-bar" id="progress-bar"></div>
-            </div>
-            <span class="step-indicator" id="step-indicator">Pergunta 1/12</span>
-        </header>
-
-        <!-- Dynamic Content Area -->
-        <div id="content-card" class="card fade-in">
-            <!-- Intro Content -->
-            <div class="intro-content">
-                <div style="margin-bottom: 2rem;">
-                    <span
-                        style="background: #DBEAFE; color: #2563EB; padding: 0.5rem 1rem; border-radius: 99px; font-weight: 700; font-size: 0.8rem; text-transform: uppercase;">Quiz
-                        Gratuito</span>
-                </div>
-                <h1 class="main-title">Qual é o Seu Maior Bloqueio Para Transformar Conhecimento em Resultados?</h1>
-                <p class="subtitle" style="margin-bottom: 2rem;">Descubra em 3 minutos qual o hábito que está te
-                    impedindo de aplicar o que você estuda e ganhe um plano de ação personalizado.</p>
-                <button class="btn-primary" onclick="startQuiz()">
-                    COMEÇAR AGORA <i data-lucide="arrow-right"></i>
-                </button>
-                <p style="margin-top: 1rem; font-size: 0.85rem; color: #94A3B8;">⏰ Tempo médio: 3 minutos</p>
-            </div>
-        </div>
-    </main>
-
-    <script src="script.js"></script>
     <script>
-        lucide.createIcons();
+        // Carregar dados salvos
+        let tabs = [];
+        let currentTab = 0;
+
+        // Inicializar
+        function init() {
+            const saved = localStorage.getItem('checkAppData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                tabs = data.tabs || [];
+                currentTab = data.currentTab || 0;
+            }
+
+            if (tabs.length === 0) {
+                tabs = [
+                    { id: 1, title: "Controle Semanal", checks: {} }
+                ];
+            }
+
+            render();
+        }
+
+        // Salvar dados
+        function save() {
+            const data = {
+                tabs: tabs,
+                currentTab: currentTab
+            };
+            localStorage.setItem('checkAppData', JSON.stringify(data));
+        }
+
+        // Renderizar abas
+        function renderTabs() {
+            const tabsDiv = document.getElementById('tabs');
+            tabsDiv.innerHTML = '';
+
+            tabs.forEach((tab, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'tab-btn' + (index === currentTab ? ' active' : '');
+                btn.textContent = tab.title || 'Aba ' + (index + 1);
+                btn.onclick = () => {
+                    currentTab = index;
+                    render();
+                };
+                tabsDiv.appendChild(btn);
+            });
+
+            // Botão para adicionar
+            const addBtn = document.createElement('button');
+            addBtn.className = 'add-btn';
+            addBtn.textContent = '+';
+            addBtn.onclick = () => {
+                const newId = Date.now();
+                tabs.push({
+                    id: newId,
+                    title: 'Nova Aba',
+                    checks: {}
+                });
+                currentTab = tabs.length - 1;
+                save();
+                render();
+            };
+            tabsDiv.appendChild(addBtn);
+        }
+
+        // Renderizar tabela
+        function renderTable() {
+            const table = document.getElementById('table');
+            table.innerHTML = '';
+
+            // Cabeçalho
+            const header = document.createElement('tr');
+            ['S', 'T', 'Q', 'Q', 'S', 'S', 'D'].forEach(text => {
+                const th = document.createElement('th');
+                th.textContent = text;
+                header.appendChild(th);
+            });
+            table.appendChild(header);
+
+            // 4 semanas
+            const current = tabs[currentTab];
+
+            for (let week = 0; week < 4; week++) {
+                const row = document.createElement('tr');
+
+                for (let day = 0; day < 7; day++) {
+                    const cell = document.createElement('td');
+                    const key = week + '-' + day;
+
+                    // Verificar se está marcado
+                    if (current.checks && current.checks[key]) {
+                        cell.classList.add('checked');
+                    }
+
+                    // Checkmark
+                    const check = document.createElement('div');
+                    check.className = 'check';
+                    check.textContent = '✓';
+                    cell.appendChild(check);
+
+                    // Click
+                    cell.onclick = () => {
+                        if (cell.classList.contains('checked')) {
+                            cell.classList.remove('checked');
+                            delete current.checks[key];
+                        } else {
+                            cell.classList.add('checked');
+                            if (!current.checks) current.checks = {};
+                            current.checks[key] = true;
+                        }
+                        save();
+                    };
+
+                    row.appendChild(cell);
+                }
+
+                table.appendChild(row);
+            }
+        }
+
+        // Atualizar título
+        function setupTitle() {
+            const titleInput = document.getElementById('titleInput');
+            titleInput.value = tabs[currentTab].title || '';
+
+            titleInput.oninput = function () {
+                tabs[currentTab].title = this.value;
+                save();
+                renderTabs();
+            };
+        }
+
+        // Renderizar tudo
+        function render() {
+            renderTabs();
+            setupTitle();
+            renderTable();
+        }
+
+        // Iniciar
+        init();
     </script>
 </body>
 
